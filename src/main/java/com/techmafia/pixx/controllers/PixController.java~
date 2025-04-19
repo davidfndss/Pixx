@@ -6,7 +6,6 @@ import com.techmafia.pixx.domain.dto.response.ApiResponseDto;
 import com.techmafia.pixx.services.PixService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,7 @@ public class PixController {
 
     private static final Logger logger = Logger.getLogger(PixController.class.getName());
 
-    @PostMapping(value = "/generate", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/generate")
     public ResponseEntity<?> generatePix(@RequestBody PixDTO pixDTO) {
         try {
             QrCodeDTO qrCodeDTO = pixService.generateQRCodePixService(pixDTO);

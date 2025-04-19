@@ -1,0 +1,49 @@
+package com.techmafia.pixx.services;
+
+
+import com.techmafia.pixx.domain.dto.PixDTO;
+import com.techmafia.pixx.domain.dto.QrCodeDTO;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.*;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
+
+@Service
+public class PixService {
+
+    private final ModelMapper modelMapper = new ModelMapper();
+
+    public QrCodeDTO generateQRCodePixService(PixDTO pixDTO) {
+        return comunicateWithPixMicroservice(pixDTO);
+    }
+
+//    private QrCodeDTO comunicateWithPixMicroservice(Object requestBody) {
+//        // String url = "http://localhost:8080/pix/teste";
+//        String url = "https://www.gerarpix.com.br/emvqr-static";
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Content-Type", "application/json");
+//        HttpEntity<Object> entity = new HttpEntity<>(requestBody, headers);
+//
+//        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+//        return modelMapper.map(response.getBody(), QrCodeDTO.class);
+//    }
+
+    private QrCodeDTO comunicateWithPixMicroservice(Object requestBody) {
+        // String url = "http://localhost:8080/pix/teste";
+        String url = "https://www.gerarpix.com.br/emvqr-static";
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Object> entity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
+        return modelMapper.map(response.getBody(), QrCodeDTO.class);
+    }
+}
